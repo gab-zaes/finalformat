@@ -24,7 +24,17 @@ class Book():
         self.bio = meta["bio"]
 
         self.font1 = font1
-        self.font2 = font2       
+        self.font2 = font2     
+
+    def change_chapters(self, n1: int, n2: int):
+        length = len(self.index)
+        if length >= n1 > 0 and length >= n2 > 0:
+            # swap values using tmp variable
+            tmp = self.index[n1 - 1]
+            self.index[n1 - 1] = self.index[n2 - 1]
+            self.index[n2 - 1] = tmp
+        else:
+            raise ValueError
 
 
 class Chapter():
@@ -79,7 +89,20 @@ def main():
     book = Book(chapters, args.font_body, args.font_title, **meta)
 
     # ask the user if he/she wants to change the order of chapters. If so, call change_index() to sort chapters in Book instance
-    # return another version of Book object
+    while True:
+        try:
+            answer = input("Would you like to change the order of chapters(Y/N):").lower()
+        except EOFError:
+            sys.exit("Program interruptef by keyboard.")
+
+        if answer in ["yes", "y", "sim", "s"]:
+            if change_index(book):
+                print("\nSuccess! You changed the chapters order\n")
+                break
+            else:
+                print("Failed to change the order.")
+        elif answer in ["no", "n", "não"]:
+            break
 
 
     # output the return value to consolidate() saving it to pdf by calling a function
@@ -115,6 +138,10 @@ def read_file(path: str):
             html = result.value
             html = re.sub(r'<a(\w|"|=| )+></a>', "", html)
 
+    else:
+        with open(path, "r") as html_file:
+            html = html_file.read   
+
     splitted = re.split("<h1>", html)
     
     for s in splitted:
@@ -143,6 +170,36 @@ def get_meta():
         meta[key] = input(f"Add {key}: ")
 
     return meta
+
+
+def change_index(book):
+    swap = input("Which chapters, described as pairs of positive integer numbers separated by spaces \n \
+    (ex: 1 5 3 7 10 9 => this will swap chapter 1 with 5, 3 with 7, and so on), would you like to swap? ").strip()
+
+    swap = swap.split(" ")
+
+    # check for even number
+    if not len(swap) % 2 == 0:
+        print("error 0")
+        return False
+
+    # convert then to integers
+    for i, n in enumerate(swap):
+        try:
+            swap[i] = int(n)
+        except ValueError:
+            print("error 1")
+            return False
+            
+    # iterate over pairs to swap then
+    for j in range(0, len(swap), 2):
+        try:
+            book.change_chapters(swap[j], swap[j + 1])
+        except ValueError:
+            print("error 2")
+            return False
+
+    return True
 
 
 def create_chapter(title: str, body: str):
