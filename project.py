@@ -70,9 +70,6 @@ class PDF(FPDF):
                 place = "R"
             self.cell(0, 10, '%s' % self.page_no(), 0, 0, place)
 
-    # def multi_cell(self, w, h, txt='', border=0, align='J', fill=0, split_only=False):
-    #     ...
-
 
     def assign_fonts(self, font1, font2):
         match font1:
@@ -122,7 +119,7 @@ LINE_SPACING = 4.6
 def main():
     # in the main function, ingest the cli arguments with argparse
     parser = argparse.ArgumentParser(
-        prog="finalformat",
+        prog="project.py",
         description="This program transforms docx and html files into formatted pdfs",
         epilog="Remember to input a docx or html file with a Title followed by Paragraphs sctructure!\n",
     )
