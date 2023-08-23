@@ -217,7 +217,7 @@ def read_file(path: str):
 
     else:
         with open(path, "r") as html_file:
-            html = html_file.read   
+            html = html_file.read()   
 
     splitted = re.split("<h1>", html)
     

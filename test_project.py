@@ -1,4 +1,4 @@
-from project import read_file, get_meta, change_index, replace_tags, consolidate_pdf, PDF, Book, Chapter
+from project import read_file, change_index, consolidate_pdf, Book, Chapter
 import pytest
 
 meta = {
